@@ -38,3 +38,42 @@ let currentImageIndex = 0;
         showImage();
         setInterval(nextImage, 5000);
         document.getElementById('current-year').textContent = new Date().getFullYear();
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('contact-form');
+        
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault(); // Prevent the default form submission
+        
+                // Gather the form data
+                const formData = {
+                    name: form.name.value,
+                    email: form.email.value,
+                    message: form.message.value
+                };
+        
+                try {
+                    // Send the form data to the server
+                    const response = await fetch('/submit', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(formData)
+                    });
+        
+                    // Handle the response from the server
+                    if (response.ok) {
+                        const result = await response.text();
+                        alert(result); // Show a success message or handle it as needed
+                        form.reset(); // Reset the form after successful submission
+                    } else {
+                        alert('There was an error submitting the form.');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('There was an error submitting the form.');
+                }
+            });
+        });
+        
+        
